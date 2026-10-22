@@ -6,6 +6,8 @@ const STATIC_ASSETS = [
   './css/style.css',
   './js/app.js',
   './libs/html5-qrcode.min.js',
+  './libs/fonts/Tajawal-Regular.woff2', 
+  './libs/fonts/Tajawal-Bold.woff2',    
   './icon-192.png',
   './icon-512.png'
 ];
