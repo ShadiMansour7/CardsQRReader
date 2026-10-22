@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="pine" data-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1e3a2f" id="meta-theme-color">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>قارئ البطاقات السريع | QR-Cards Reader</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- الشريط العلوي -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <h1 class="brand-title">قارئ البطاقات السريع</h1>
+        <span class="brand-subtitle">تجميع رموز QR إلى نص متصل</span>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="btn-toggle-mode" class="btn-icon" aria-label="تبديل الوضع الليلي/النهاري" title="تبديل الوضع الليلي/النهاري">
+          <span id="mode-icon">☀️</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- المحتوى الرئيسي -->
+  <main class="main-container">
+    <!-- بطاقة الماسح الضوئي -->
+    <section class="card scanner-card">
+      <div class="card-header">
+        <h2 class="card-title">📷 كاميرا المسح المستمر</h2>
+        <span id="scanner-badge" class="status-badge status-idle">متوقف</span>
+      </div>
+
+      <!-- منطقة عرض الكاميرا -->
+      <div class="qr-viewport-wrap">
+        <div id="qr-reader" class="qr-reader-box"></div>
+        <div id="qr-placeholder" class="qr-placeholder">
+          <div class="placeholder-icon">📷</div>
+          <p>اضغط على «تشغيل الكاميرا» لبدء المسح السريع</p>
+        </div>
+      </div>
+
+      <!-- شريط حالة الكاميرا والعدسة -->
+      <div id="qr-status-bar" class="qr-status-bar" aria-live="polite">
+        الكاميرا متوقفة حالياً.
+      </div>
+
+      <!-- أزرار التحكم بالكاميرا -->
+      <div class="camera-controls">
+        <button type="button" id="btn-start-camera" class="btn btn-primary">
+          ▶️ تشغيل الكاميرا
+        </button>
+        <button type="button" id="btn-switch-camera" class="btn btn-secondary" hidden>
+          🔄 تبديل الكاميرا
+        </button>
+        <button type="button" id="btn-stop-camera" class="btn btn-danger" hidden>
+          ⏹️ إيقاف
+        </button>
+      </div>
+    </section>
+
+    <!-- بطاقة الإحصاءات والنص المجمّع -->
+    <section class="card output-card">
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="stat-label">العدد الممسوح</span>
+          <strong id="stat-count" class="stat-value">0</strong>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">آخر معرّف (ID)</span>
+          <strong id="stat-last-id" class="stat-value stat-mono" dir="ltr">—</strong>
+        </div>
+      </div>
+
+      <!-- خيارات تنسيق النص -->
+      <div class="format-bar">
+        <label class="toggle-label">
+          <input type="checkbox" id="chk-keep-hyphen" checked>
+          <span>إبقاء الشرطة <code>-</code> داخل المعرّف (مثل <code>QAT-1001</code>)</span>
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="chk-sound" checked>
+          <span>🔔 صوت تنبيه</span>
+        </label>
+      </div>
+
+      <!-- حقل النص المجمّع -->
+      <div class="form-group">
+        <div class="label-row">
+          <label for="output-text" class="form-label">النص المجمّع (جاهز للنسخ واللصق):</label>
+          <span id="char-counter" class="form-hint">0 حرف</span>
+        </div>
+        <textarea
+          id="output-text"
+          class="form-textarea"
+          dir="ltr"
+          rows="4"
+          readonly
+          placeholder="ستظهر المعرّفات هنا متصلة وراء بعضها بمجرد مسح رموز QR..."
+        ></textarea>
+      </div>
+
+      <!-- أزرار التحكم بالنص -->
+      <div class="output-actions">
+        <button type="button" id="btn-copy-text" class="btn btn-primary btn-copy" disabled>
+          📋 نسخ النص بالكامل
+        </button>
+        <div class="secondary-actions">
+          <button type="button" id="btn-undo-last" class="btn btn-secondary" disabled>
+            ↩️ تراجع عن آخر ID
+          </button>
+          <button type="button" id="btn-clear-all" class="btn btn-danger-outline" disabled>
+            🗑️ مسح الكل
+          </button>
+        </div>
+      </div>
+
+      <!-- شرائح المعرّفات الممسوحة للتحكم الفردي -->
+      <div id="chips-section" class="chips-section" hidden>
+        <div class="label-row">
+          <span class="form-label">ترتيب المسح (اضغط على × لحذف معرّف معيّن):</span>
+        </div>
+        <div id="scanned-chips" class="chips-list" dir="ltr"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- حاوية الإشعارات الفورية (Toasts) -->
+  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+
+  <!-- مكتبة قارئ QR (محلياً مع بديل CDN تلقائي عند الحاجة) -->
+  <script src="libs/html5-qrcode.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

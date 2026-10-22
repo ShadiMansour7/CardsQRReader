@@ -1,0 +1,638 @@
+/* ==========================================================================
+   ثيم صنوبر وفضي (Pine & Silver) — نهاري وليلي
+   ممنوع اللون البنفسجي بكل درجاته.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Tajawal';
+  src: local('Tajawal'), local('Tajawal-Regular'), url('../libs/fonts/Tajawal-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  src: local('Tajawal Bold'), local('Tajawal-Bold'), url('../libs/fonts/Tajawal-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* الوضع النهاري — صنوبر وفضي (Pine & Silver Light) */
+:root,
+html[data-theme="pine"][data-mode="light"] {
+  --bg-main: #f2f5f4;
+  --bg-surface: #ffffff;
+  --bg-elevated: #e8eeec;
+  --bg-input: #f8faf9;
+  --text-main: #18241f;
+  --text-secondary: #4a5d54;
+  --text-muted: #768980;
+  --border-color: #cfd9d4;
+  --border-strong: #b0c0b8;
+
+  /* ألوان الصنوبر الأساسية */
+  --primary: #1e4d3b;
+  --primary-hover: #15382b;
+  --primary-soft: rgba(30, 77, 59, 0.12);
+  --gradient-primary: linear-gradient(135deg, #1e4d3b 0%, #2d6a52 100%);
+
+  /* ألوان الفضي والرمادي المعدني */
+  --silver-accent: #8fa39a;
+  --silver-bg: #e2e8e5;
+
+  /* حالات النظام (أخضر، كهرماني، أحمر قرمزي — بدون أي بنفسجي) */
+  --success: #1b7a4e;
+  --success-bg: rgba(27, 122, 78, 0.12);
+  --warning: #b45309;
+  --warning-bg: rgba(180, 83, 9, 0.13);
+  --danger: #b91c1c;
+  --danger-bg: rgba(185, 28, 28, 0.11);
+
+  --header-bg: #183d2f;
+  --header-text: #f2f5f4;
+  --shadow-sm: 0 2px 6px rgba(20, 40, 32, 0.06);
+  --shadow-md: 0 6px 18px rgba(20, 40, 32, 0.10);
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+/* الوضع الليلي — صنوبر وفضي (Pine & Silver Dark) */
+html[data-theme="pine"][data-mode="dark"] {
+  --bg-main: #111815;
+  --bg-surface: #19231f;
+  --bg-elevated: #22302a;
+  --bg-input: #141d19;
+  --text-main: #e6ece9;
+  --text-secondary: #b0c2b9;
+  --text-muted: #7e9489;
+  --border-color: #2c3e36;
+  --border-strong: #3d544a;
+
+  /* ألوان الصنوبر المضيئة للدارك مود مع الفضي */
+  --primary: #2e6f56;
+  --primary-hover: #469476;
+  --primary-soft: rgba(70, 148, 118, 0.16);
+  --gradient-primary: linear-gradient(135deg, #255c47 0%, #377d62 100%);
+
+  --silver-accent: #9cb0a7;
+  --silver-bg: #25332d;
+
+  --success: #2ea86f;
+  --success-bg: rgba(46, 168, 111, 0.16);
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.18);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.18);
+
+  --header-bg: #14241d;
+  --header-text: #e6ece9;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ==========================================================================
+   قواعد عامة
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Tajawal', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ==========================================================================
+   الشريط العلوي
+   ========================================================================== */
+.app-header {
+  background: var(--header-bg);
+  color: var(--header-text);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.65rem 1rem;
+}
+
+.header-container {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--header-text);
+}
+
+.brand-subtitle {
+  font-size: 0.84rem;
+  color: var(--silver-accent);
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--header-text);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================================================
+   الحاوية والبطاقات
+   ========================================================================== */
+.main-container {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  padding: 0 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.status-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.status-idle {
+  background: var(--silver-bg);
+  color: var(--text-secondary);
+}
+
+.status-active {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+/* ==========================================================================
+   منطقة الكاميرا والمسح الضوئي
+   ========================================================================== */
+.qr-viewport-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 250px;
+  max-height: 360px;
+  background: var(--bg-input);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-viewport-wrap.is-scanning {
+  border-style: solid;
+  border-color: var(--primary);
+  background: #000;
+}
+
+/* وميض أخضر سريع عند التقاط رمز صحيح */
+.qr-viewport-wrap.scan-flash-ok {
+  box-shadow: 0 0 0 4px var(--success);
+}
+
+/* وميض أحمر عند التقاط رابط أو رمز مرفوض */
+.qr-viewport-wrap.scan-flash-err {
+  box-shadow: 0 0 0 4px var(--danger);
+}
+
+.qr-reader-box {
+  width: 100%;
+  height: 100%;
+}
+
+.qr-reader-box video {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 356px;
+  object-fit: cover;
+  display: block;
+}
+
+.qr-placeholder {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+}
+
+.placeholder-icon {
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.qr-status-bar {
+  margin-top: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-elevated);
+  border-radius: 8px;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  text-align: center;
+  word-break: break-word;
+}
+
+.camera-controls {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.camera-controls .btn {
+  flex: 1 1 0;
+  min-width: 115px;
+}
+
+/* ==========================================================================
+   الإحصاءات والنص المجمّع
+   ========================================================================== */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.stat-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.15rem;
+}
+
+.stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stat-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.15rem;
+  color: var(--primary-hover);
+}
+
+html[data-mode="light"] .stat-mono {
+  color: var(--primary);
+}
+
+.format-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-elevated);
+  border-radius: 10px;
+  margin-bottom: 0.9rem;
+  font-size: 0.88rem;
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.toggle-label input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.toggle-label code {
+  background: var(--bg-surface);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--text-main);
+}
+
+.form-group {
+  margin-bottom: 0.9rem;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.form-textarea {
+  width: 100%;
+  background: var(--bg-input);
+  color: var(--text-main);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1rem;
+  line-height: 1.55;
+  resize: vertical;
+  word-break: break-all;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* ==========================================================================
+   الأزرار
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0.6rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: filter 0.18s, background 0.18s, transform 0.12s, opacity 0.18s;
+  user-select: none;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+[data-mode="dark"] .btn-primary:hover:not(:disabled) {
+  background: var(--gradient-primary);
+  filter: brightness(1.15);
+}
+
+.btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-main);
+  border-color: var(--border-strong);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--silver-bg);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.btn-danger-outline {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+  background: var(--danger-bg);
+}
+
+.output-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.btn-copy {
+  width: 100%;
+  font-size: 1.02rem;
+}
+
+.secondary-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+/* ==========================================================================
+   شرائح المعرّفات الممسوحة (Chips)
+   ========================================================================== */
+.chips-section {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 0.25rem 0;
+}
+
+.id-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.84rem;
+}
+
+.id-chip-remove {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.15rem;
+  border-radius: 50%;
+}
+
+.id-chip-remove:hover {
+  background: var(--danger-bg);
+}
+
+/* ==========================================================================
+   الإشعارات (Toasts)
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  animation: toastIn 0.22s ease-out;
+}
+
+.toast-success {
+  background: var(--bg-surface);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.toast-warning {
+  background: var(--bg-surface);
+  color: var(--warning);
+  border-color: var(--warning);
+}
+
+.toast-error {
+  background: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger);
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    padding: 0.6rem 0.85rem;
+  }
+  .brand-title {
+    font-size: 1.02rem;
+  }
+  .brand-subtitle {
+    font-size: 0.8rem;
+  }
+  .card {
+    padding: 0.95rem;
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "قارئ البطاقات السريع | QR-Cards Reader",
+  "short_name": "قارئ البطاقات",
+  "description": "قارئ رموز QR سريع لتجميع المعرّفات النصية (IDs) في نص واحد متصل بدون تكرار",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111815",
+  "theme_color": "#14241d",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
